@@ -95,10 +95,10 @@ public class RAGTest {
         log.info("搜索完成，找到相关文档数量: {}", documents.size());
 
         for (int i = 0; i < documents.size(); i++) {
-            log.info("文档[{}]内容片段: {}", i+1, documents.get(i).getContentFormatter().toString().substring(0, Math.min(50, documents.get(i).getContentFormatter().toString().length())) + "...");
+            log.info("文档[{}]内容片段: {}", i+1, documents.get(i).getText().substring(0, Math.min(50, documents.get(i).getText().length())) + "...");
         }
 
-        String documentsCollectors = documents.stream().map(document -> document.getContentFormatter().toString()).collect(Collectors.joining());
+        String documentsCollectors = documents.stream().map(Document::getText).collect(Collectors.joining());
         log.info("合并文档总长度: {} 字符", documentsCollectors.length());
 
         log.info("创建RAG系统消息...");

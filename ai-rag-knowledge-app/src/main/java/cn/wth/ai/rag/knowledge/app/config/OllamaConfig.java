@@ -7,6 +7,7 @@ import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.ai.ollama.management.ModelManagementOptions;
+import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
@@ -50,11 +51,11 @@ public class OllamaConfig {
      */
     @Bean
     public SimpleVectorStore simpleVectorStore(OllamaApi ollamaApi) {
-        OllamaOptions options = new OllamaOptions();
-        options.setModel("nomic-embed-text");
-        ObservationRegistry observationRegistry = ObservationRegistry.create();
-        ModelManagementOptions managementOptions = ModelManagementOptions.defaults();
-        var embeddingModel = new OllamaEmbeddingModel(ollamaApi, options, observationRegistry, managementOptions);
+        OllamaEmbeddingModel embeddingModel = OllamaEmbeddingModel
+                .builder()
+                .ollamaApi(ollamaApi)
+                .defaultOptions(OllamaOptions.builder().model("nomic-embed-text").build())
+                .build();
         return SimpleVectorStore.builder(embeddingModel).build();
     }
 
@@ -70,12 +71,14 @@ public class OllamaConfig {
      */
     @Bean
     public PgVectorStore pgVectorStore(OllamaApi ollamaApi, JdbcTemplate jdbcTemplate) {
-        OllamaOptions options = new OllamaOptions();
-        options.setModel("nomic-embed-text");
-        ObservationRegistry observationRegistry = ObservationRegistry.create();
-        ModelManagementOptions managementOptions = ModelManagementOptions.defaults();
-        var embeddingModel = new OllamaEmbeddingModel(ollamaApi, options, observationRegistry, managementOptions);
-        return PgVectorStore.builder(jdbcTemplate, embeddingModel).build();
+        OllamaEmbeddingModel embeddingModel = OllamaEmbeddingModel
+                .builder()
+                .ollamaApi(ollamaApi)
+                .defaultOptions(OllamaOptions.builder().model("nomic-embed-text").build())
+                .build();
+        return PgVectorStore.builder(jdbcTemplate, embeddingModel)
+                .vectorTableName("vector_store_ollama_deepseek")
+                .build();
     }
 
 }

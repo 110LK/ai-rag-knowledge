@@ -28,11 +28,17 @@ spring:
       connection-test-query: SELECT 1
   ai:
     ollama:
-      base-url: http://192.168.3.4:11434
+      base-url: http://192.168.1.109:11434
       embedding:
         options:
           num-batch: 512
         model: nomic-embed-text
+    openai:
+      base-url: https://pro-share-aws-api.zcyai.com/
+      api-key: sk-**************
+      embedding-model: text-embedding-ada-002
+    rag:
+      embed: nomic-embed-text #nomic-embed-text、text-embedding-ada-002
 
 # Redis
 redis:
