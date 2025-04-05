@@ -42,8 +42,6 @@ public class RAGTest {
     @Resource
     private TokenTextSplitter tokenTextSplitter;
     @Resource
-    private SimpleVectorStore simpleVectorStore;
-    @Resource
     private PgVectorStore pgVectorStore;
 
     @Test
